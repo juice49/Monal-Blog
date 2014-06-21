@@ -46,10 +46,10 @@
 							</li>
 						</ul>
 						<div class="node__y--top align--right">
-							@if($system_user->hasAdminPermissions('blog', 'edit_blog_categories'))
+							@if($system_user->hasAdminPermissions('blog', 'edit_blog_category'))
 								<a href="{{ URL::route('admin.blog.categories.edit', $category->ID()) }}" class="button button--small button--dusk">Edit</a>
 							@endif
-							@if($system_user->hasAdminPermissions('blog', 'delete_blog_categories'))
+							@if($system_user->hasAdminPermissions('blog', 'delete_blog_category'))
 								<span class="button button--small button--cuban_heat">Delete</span>
 							@endif
 						</div>

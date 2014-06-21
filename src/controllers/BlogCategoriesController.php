@@ -36,7 +36,7 @@ class BlogCategoriesController extends AdminController
      */
     public function create()
     {
-        if (!$this->system->user->hasAdminPermissions('blog', 'create_blog_categories')) {
+        if (!$this->system->user->hasAdminPermissions('blog', 'create_blog_category')) {
             return Redirect::route('admin.blog.categories');
         }
         $category = BlogCategoriesRepository::newModel();
@@ -61,7 +61,7 @@ class BlogCategoriesController extends AdminController
      */
     public function edit($id)
     {
-        if (!$this->system->user->hasAdminPermissions('blog', 'edit_blog_categories')) {
+        if (!$this->system->user->hasAdminPermissions('blog', 'edit_blog_category')) {
             return Redirect::route('admin.blog.categories');
         }
         if ($category = BlogCategoriesRepository::retrieve($id)) {
