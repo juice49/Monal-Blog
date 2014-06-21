@@ -105,7 +105,7 @@ class MonalBlogCategoriesRepository extends Repository implements BlogCategories
     {
         $query = \DB::table($this->table);
         if (!$key) {
-            $results = $query->select('*')->get();
+            $results = $query->select('*')->orderBy('name')->get();
             $blog_categories = \App::make('Illuminate\Database\Eloquent\Collection');
             foreach ($results as $result) {
                 $blog_categories->add($this->decodeFromStorage($result));
