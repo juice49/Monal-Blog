@@ -13,7 +13,10 @@
     },
     "autoload": {
         "classmap": [
-            "src/migrations"
+            "src/controllers",
+            "src/migrations",
+            "src/models",
+            "src/repositories"
         ],
         "psr-0": {
             "Monal\\Blog\\": "src/"
