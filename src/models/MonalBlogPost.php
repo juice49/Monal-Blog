@@ -59,6 +59,7 @@ class MonalBlogPost extends Model implements BlogPost
     /**
      * Constructor.
      *
+     * @param   Monal\Data\Models\DataStreamTemplate
      * @return  Void
      */
     public function __construct(DataStreamTemplate $template)
