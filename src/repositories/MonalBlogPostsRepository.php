@@ -167,6 +167,20 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
+     * Retrieve a blog post from the repository by its slug.
+     *
+     * @param   String
+     * @return  Monal\Pages\Models\Page
+     */
+    public function retrieveBySlug($slug)
+    {
+        if ($post = \DB::table($this->table)->where('slug', '=', $slug)->first()) {
+            return $this->decodeFromStorage($post);
+        }
+        return false;
+    }
+
+    /**
      * Write a Blog Post model to the repository.
      *
      * @param   Monal\Blog\Models\BlogPost

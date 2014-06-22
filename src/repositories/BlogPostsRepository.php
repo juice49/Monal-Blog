@@ -44,6 +44,14 @@ interface BlogPostsRepository
     public function retrieve($key = null);
 
     /**
+     * Retrieve a blog post from the repository by its slug.
+     *
+     * @param   String
+     * @return  Monal\Pages\Models\Page
+     */
+    public function retrieveBySlug($slug);
+
+    /**
      * Write a Blog Post model to the repository.
      *
      * @param   Monal\Blog\Models\BlogPost
