@@ -61,11 +61,13 @@ class BlogServiceProvider extends ServiceProvider implements MonalPackageService
 		include __DIR__ . '/../../routes.php';
 
 		// Add menu options to the dashboard.
+		\Monal\API\Dashboard::addMenuOption('Blog', 'Blog Posts', 'blog/posts');
 		\Monal\API\Dashboard::addMenuOption('Blog', 'Blog Categories', 'blog/categories');
 
 		// Load facade aliases.
 		$loader = \Illuminate\Foundation\AliasLoader::getInstance();
 		$loader->alias('BlogCategoriesRepository', 'Monal\Blog\Facades\BlogCategoriesRepository');
+		$loader->alias('BlogPostsRepository', 'Monal\Blog\Facades\BlogPostsRepository');
 	}
 
 	/**
@@ -77,9 +79,21 @@ class BlogServiceProvider extends ServiceProvider implements MonalPackageService
 	{
 		// Bind classes to the IOC.
 		$this->app->bind(
+			'Monal\Blog\Models\BlogPost',
+			function ($app, $parameters) {
+				return new \Monal\Blog\Models\MonalBlogPost($parameters[0]);
+			}
+		);
+		$this->app->bind(
 			'Monal\Blog\Models\BlogCategory',
 			function ($app, $parameters) {
 				return new \Monal\Blog\Models\MonalBlogCategory;
+			}
+		);
+		$this->app->bind(
+			'Monal\Blog\Repositories\BlogPostsRepository',
+			function ($app, $parameters) {
+				return new \Monal\Blog\Repositories\MonalBlogPostsRepository;
 			}
 		);
 		$this->app->bind(
@@ -90,6 +104,11 @@ class BlogServiceProvider extends ServiceProvider implements MonalPackageService
 		);
 
 		// Register facade bindings.
+		$this->app['BlogPostsRepository'] = $this->app->share(
+			function ($app) {
+				return \App::make('Monal\Blog\Repositories\BlogPostsRepository');
+			}
+		);
 		$this->app['BlogCategoriesRepository'] = $this->app->share(
 			function ($app) {
 				return \App::make('Monal\Blog\Repositories\BlogCategoriesRepository');

@@ -2,6 +2,27 @@
 
 Monal\API\Routes::addAdminRoute(
 	'any',
+	'blog/posts',
+	'admin.blog.posts',
+	'BlogPostsController@posts'
+);
+
+Monal\API\Routes::addAdminRoute(
+	'any',
+	'blog/posts/create',
+	'admin.blog.posts.create',
+	'BlogPostsController@create'
+);
+
+Monal\API\Routes::addAdminRoute(
+	'any',
+	'blog/posts/edit/{id}',
+	'admin.blog.posts.edit',
+	'BlogPostsController@edit'
+);
+
+Monal\API\Routes::addAdminRoute(
+	'any',
 	'blog/categories',
 	'admin.blog.categories',
 	'BlogCategoriesController@categories'
