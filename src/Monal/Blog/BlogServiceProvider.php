@@ -79,6 +79,18 @@ class BlogServiceProvider extends ServiceProvider implements MonalPackageService
 	{
 		// Bind classes to the IOC.
 		$this->app->bind(
+			'Monal\Blog\Models\FrontendBlogPage',
+			function ($app, $parameters) {
+				return new \Monal\Blog\Models\MonalFrontendBlogPage($parameters[0]);
+			}
+		);
+		$this->app->bind(
+			'Monal\Blog\Models\FrontendBlogPost',
+			function ($app, $parameters) {
+				return new \Monal\Blog\Models\MonalFrontendBlogPost($parameters[0]);
+			}
+		);
+		$this->app->bind(
 			'Monal\Blog\Models\BlogPost',
 			function ($app, $parameters) {
 				return new \Monal\Blog\Models\MonalBlogPost($parameters[0]);
