@@ -10,9 +10,10 @@ namespace Monal\Blog\Models;
 
 use Monal\Models\Model;
 use Monal\Blog\Models\BlogPost;
+use Monal\Blog\Models\ToPage;
 use Monal\Data\Models\DataStreamTemplate;
 
-class MonalBlogPost extends Model implements BlogPost
+class MonalBlogPost extends Model implements BlogPost, ToPage
 {
     /**
      * The blog post's ID.
@@ -181,6 +182,8 @@ class MonalBlogPost extends Model implements BlogPost
 
     /**
      * Return the blog post's URL.
+     *
+     * @return  String
      */
     public function URL()
     {

@@ -79,6 +79,8 @@ interface BlogPost
 
     /**
      * Return the blog post's URL.
+     *
+     * @return  String
      */
     public function URL();
 
