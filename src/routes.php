@@ -45,6 +45,14 @@ Monal\API\Routes::addAdminRoute(
 
 // Frontend routes.
 Route::get(
+	'blog',
+	array(
+		'as' => 'blog',
+		'uses' => 'FrontendBlogController@blog',
+	)
+);
+
+Route::get(
 	'blog/{slug}',
 	array(
 		'as' => 'blog',
