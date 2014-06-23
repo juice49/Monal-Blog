@@ -135,7 +135,10 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
         $post->setID($result->id);
         $post->setTitle($result->title);
         $post->setSlug($result->slug);
-        $post->setSlug($result->slug);
+        $post->setUser($result->user);
+        $post->setDescription($result->description);
+        $post->setKeywords($result->keywords);
+        $post->setURL(\URL::to(\Config::get('blog::settings.slug') . '/' . $result->slug));
         $post->dataSets()[0]->component()->setValueFromStoragePreparedValues($result->images);
         $post->dataSets()[1]->component()->setValueFromStoragePreparedValues($result->intro);
         $post->dataSets()[2]->component()->setValueFromStoragePreparedValues($result->body);
