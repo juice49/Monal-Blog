@@ -64,18 +64,23 @@ interface BlogPost
     public function user();
 
     /**
-     * Return an array of CSS files the blog post needs to work.
+     * Return the blog post's description.
      *
-     * @return  Array
+     * @return  String
      */
-    public function css();
+    public function description();
 
     /**
-     * Return an array of JS files the blog post needs to work.
+     * Return the blog post's keywords.
      *
-     * @return  Array
+     * @return  String
      */
-    public function scripts();
+    public function keywords();
+
+    /**
+     * Return the blog post's URL.
+     */
+    public function URL();
 
     /**
      * Set the blog post's ID.
@@ -108,6 +113,44 @@ interface BlogPost
      * @return  Void
      */
     public function setUser($user_id);
+
+    /**
+     * Set the blog post's description.
+     *
+     * @param   String
+     * @return  Void
+     */
+    public function setDescription($description);
+
+    /**
+     * Set the blog post's keywords.
+     *
+     * @param   String
+     * @return  Void
+     */
+    public function setKeywords($keywords);
+
+    /**
+     * Set the blog post's URL.
+     *
+     * @param   String
+     * @return  Void
+     */
+    public function setURL($url);
+
+    /**
+     * Return an array of CSS files the blog post needs to work.
+     *
+     * @return  Array
+     */
+    public function css();
+
+    /**
+     * Return an array of JS files the blog post needs to work.
+     *
+     * @return  Array
+     */
+    public function scripts();
 
     /**
      * Check the blog post validates against a set of given rules.

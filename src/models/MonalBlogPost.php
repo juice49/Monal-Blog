@@ -57,6 +57,27 @@ class MonalBlogPost extends Model implements BlogPost
     protected $user = null;
 
     /**
+     * The blog post's description.
+     *
+     * @var     String
+     */
+    protected $description = null;
+
+    /**
+     * The blog post's keywords.
+     *
+     * @var     String
+     */
+    protected $keywords = null;
+
+    /**
+     * The blog post's URL.
+     *
+     * @var     String
+     */
+    protected $url = null;
+
+    /**
      * Constructor.
      *
      * @param   Monal\Data\Models\DataStreamTemplate
@@ -139,31 +160,31 @@ class MonalBlogPost extends Model implements BlogPost
     }
 
     /**
-     * Return an array of CSS files the blog post needs to work.
+     * Return the blog post's description.
      *
-     * @return  Array
+     * @return  String
      */
-    public function css()
+    public function description()
     {
-        $css = array();
-        foreach ($this->data_sets as $data_set) {
-            $css = array_merge($css, $data_set->component()->css());
-        }
-        return $css;
+        return $this->description;
     }
 
     /**
-     * Return an array of JS files the blog post needs to work.
+     * Return the blog post's keywords.
      *
-     * @return  Array
+     * @return  String
      */
-    public function scripts()
+    public function keywords()
     {
-        $scripts = array();
-        foreach ($this->data_sets as $data_set) {
-            $scripts = array_merge($scripts, $data_set->component()->scripts());
-        }
-        return $scripts;
+        return $this->keywords;
+    }
+
+    /**
+     * Return the blog post's URL.
+     */
+    public function URL()
+    {
+        return $this->url;
     }
 
     /**
@@ -208,6 +229,67 @@ class MonalBlogPost extends Model implements BlogPost
     public function setUser($user_id)
     {
         $this->user = $user_id;
+    }
+
+    /**
+     * Set the blog post's description.
+     *
+     * @param   String
+     * @return  Void
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Set the blog post's keywords.
+     *
+     * @param   String
+     * @return  Void
+     */
+    public function setKeywords($keywords)
+    {
+        $this->keywords = $keywords;
+    }
+
+    /**
+     * Set the blog post's URL.
+     *
+     * @param   String
+     * @return  Void
+     */
+    public function setURL($url)
+    {
+        $this->url = $url;
+    }
+
+    /**
+     * Return an array of CSS files the blog post needs to work.
+     *
+     * @return  Array
+     */
+    public function css()
+    {
+        $css = array();
+        foreach ($this->data_sets as $data_set) {
+            $css = array_merge($css, $data_set->component()->css());
+        }
+        return $css;
+    }
+
+    /**
+     * Return an array of JS files the blog post needs to work.
+     *
+     * @return  Array
+     */
+    public function scripts()
+    {
+        $scripts = array();
+        foreach ($this->data_sets as $data_set) {
+            $scripts = array_merge($scripts, $data_set->component()->scripts());
+        }
+        return $scripts;
     }
 
     /**
