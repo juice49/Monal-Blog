@@ -1,5 +1,6 @@
 <?php
 
+// Admin routes.
 Monal\API\Routes::addAdminRoute(
 	'any',
 	'blog/posts',
@@ -40,4 +41,13 @@ Monal\API\Routes::addAdminRoute(
 	'blog/categories/edit/{id}',
 	'admin.blog.categories.edit',
 	'BlogCategoriesController@edit'
+);
+
+// Frontend routes.
+Route::get(
+	'blog/{slug}',
+	array(
+		'as' => 'blog',
+		'uses' => 'FrontendBlogController@post',
+	)
 );
