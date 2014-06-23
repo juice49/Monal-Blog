@@ -72,6 +72,14 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     protected $keywords = null;
 
     /**
+     * A DateTime object of the date and time that the post was created
+     * at.
+     *
+     * @var     DateTime
+     */
+    protected $created_at = null;
+
+    /**
      * The blog post's URL.
      *
      * @var     String
@@ -181,6 +189,17 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     }
 
     /**
+     * Return a DateTime object of the date and time that the post was
+     * created at.
+     *
+     * @return  DateTime
+     */
+    public function createdAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
      * Return the blog post's URL.
      *
      * @return  String
@@ -254,6 +273,17 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     public function setKeywords($keywords)
     {
         $this->keywords = $keywords;
+    }
+
+    /**
+     * Set a DateTime object of the time the post was created at.
+     *
+     * @param   DateTime
+     * @return  Void
+     */
+    public function setCreatedAtDate(\DateTime $date)
+    {
+        $this->created_at = $date;
     }
 
     /**

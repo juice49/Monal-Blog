@@ -78,6 +78,14 @@ interface BlogPost
     public function keywords();
 
     /**
+     * Return a DateTime object of the date and time that the post was
+     * created at.
+     *
+     * @return  DateTime
+     */
+    public function createdAt();
+
+    /**
      * Return the blog post's URL.
      *
      * @return  String
@@ -131,6 +139,14 @@ interface BlogPost
      * @return  Void
      */
     public function setKeywords($keywords);
+
+    /**
+     * Set a DateTime object of the time the post was created at.
+     *
+     * @param   DateTime
+     * @return  Void
+     */
+    public function setCreatedAtDate(\DateTime $date);
 
     /**
      * Set the blog post's URL.
