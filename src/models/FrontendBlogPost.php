@@ -13,7 +13,13 @@ use Monal\Blog\Models\BlogPost;
 
 interface FrontendBlogPost
 {
-	public function __construct(BlogPost $post);
+    /**
+     * Constructor.
+     *
+     * @param   Monal\Blog\Models\BlogPost
+     * @return  Void
+     */
+    public function __construct(BlogPost $post);
 
     /**
      * Return the post's title.
@@ -35,4 +41,19 @@ interface FrontendBlogPost
      * @return  stdClass
      */
     public function dataSets();
+
+    /**
+     * Return the post's URL.
+     *
+     * @return  String
+     */
+    public function URL();
+
+    /**
+     * Return a DateTime object of the date and time that the post was
+     * created at.
+     *
+     * @return  DateTime
+     */
+    public function createdAt();
 }
