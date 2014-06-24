@@ -1,7 +1,8 @@
 <?php
 namespace Monal\Blog\Libraries;
 /**
- * API for retrieving blog posts and categories.
+ * API for retrieving blog posts and categories, specifically for use
+ * on the front end.
  *
  * @author	Arran Jacque
  */
@@ -11,10 +12,13 @@ class Blog
 	/**
 	 * Return the latest blog post.
 	 *
-	 * @return	Monal\Blog\Models\BlogPost / Boolean
+	 * @return	Monal\Blog\Models\FrontendBlogPost / Boolean
 	 */
 	public function latestPost()
 	{
-		return \BlogPostsRepository::retrieveLatest();
+		if ($post = \BlogPostsRepository::retrieveLatest()) {
+			return \App::make('Monal\Blog\Models\FrontendBlogPost', array($post));
+		}
+		return false;
 	}
 }
