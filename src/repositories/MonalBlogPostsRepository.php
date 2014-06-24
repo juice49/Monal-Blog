@@ -185,6 +185,19 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
+     * Retrieve the latest blog post added to the repository.
+     *
+     * @return  Monal\Pages\Models\Page / Boolean
+     */
+    public function retrieveLatest()
+    {
+        if ($post = \DB::table($this->table)->orderBy('created_at', 'desc')->first()) {
+            return $this->decodeFromStorage($post);
+        }
+        return false;
+    }
+
+    /**
      * Write a Blog Post model to the repository.
      *
      * @param   Monal\Blog\Models\BlogPost

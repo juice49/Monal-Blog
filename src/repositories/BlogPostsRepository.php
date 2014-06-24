@@ -52,6 +52,13 @@ interface BlogPostsRepository
     public function retrieveBySlug($slug);
 
     /**
+     * Retrieve the latest blog post added to the repository.
+     *
+     * @return  Monal\Pages\Models\Page / Boolean
+     */
+    public function retrieveLatest();
+
+    /**
      * Write a Blog Post model to the repository.
      *
      * @param   Monal\Blog\Models\BlogPost
