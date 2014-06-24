@@ -3,8 +3,7 @@ namespace Monal\Blog\Repositories;
 /**
  * Blog Posts Repository.
  *
- * Repository for storing Blog Posts. This is a contract for
- * implementations of this repository to follow.
+ * Blog Posts Repository's interface.
  *
  * @author  Arran Jacques
  */
@@ -14,21 +13,14 @@ use Monal\Blog\Models\BlogPost;
 interface BlogPostsRepository
 {
     /**
-     * Return the repository's messages.
+     * Return a new blog post model.
      *
-     * @return  Illuminate\Support\MessageBag
-     */
-    public function messages();
-
-    /**
-     * Return a new Blog Post model.
+     * @return  Monal\Blog\Models\BlogPost
      *
-     * @return  Monal\Blog\Models\Posts
-     */
     public function newModel();
 
     /**
-     * Check a Blog Post model validates for storage.
+     * Check a blog post validates for storage in the repository.
      *
      * @param   Monal\Blog\Models\BlogPost
      * @return  Boolean
@@ -36,7 +28,23 @@ interface BlogPostsRepository
     public function validatesForStorage(BlogPost $post);
 
     /**
-     * Retrieve an instance/s from the repository.
+     * Encode a blog post so that it can be stored in the repository.
+     *
+     * @param   Monal\Blog\Models\BlogPost
+     * @return  Array
+     */
+    protected function encodeForStorage(BlogPost $post);
+
+    /**
+     * Decode a repository entry into a blog post.
+     *
+     * @param   stdClass
+     * @return  Monal\Blog\Models\BlogPost
+     */
+    protected function decodeFromStorage($result);
+
+    /**
+     * Retrieve a blog post/s from the repository.
      *
      * @param   Integer
      * @return  Illuminate\Database\Eloquent\Collection / Monal\Blog\Models\BlogPost
@@ -47,19 +55,19 @@ interface BlogPostsRepository
      * Retrieve a blog post from the repository by its slug.
      *
      * @param   String
-     * @return  Monal\Pages\Models\Page
+     * @return  Monal\Blog\Models\BlogPost / Boolean
      */
     public function retrieveBySlug($slug);
 
     /**
-     * Retrieve the latest blog post added to the repository.
+     * Retrieve the most recent blog post added to the repository.
      *
-     * @return  Monal\Pages\Models\Page / Boolean
+     * @return  Monal\Blog\Models\BlogPost / Boolean
      */
     public function retrieveLatest();
 
     /**
-     * Write a Blog Post model to the repository.
+     * Write a blog post to the repository.
      *
      * @param   Monal\Blog\Models\BlogPost
      * @return  Boolean

@@ -3,7 +3,7 @@ namespace Monal\Blog\Repositories;
 /**
  * Monal Blog Posts Repository.
  *
- * An implementation of the BlogPostsRepository.
+ * Repository for storing blog posts.
  *
  * @author  Arran Jacques
  */
@@ -22,7 +22,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     protected $table = 'blog_posts';
 
     /**
-     * Return a new Blog post model.
+     * Return a new blog post model.
      *
      * @return  Monal\Blog\Models\BlogPost
      */
@@ -51,7 +51,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Check a Blog Post model validates for storage.
+     * Check a blog post validates for storage in the repository.
      *
      * @param   Monal\Blog\Models\BlogPost
      * @return  Boolean
@@ -105,8 +105,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Encode a Blog Post model so it is ready to be stored in the
-     * repository.
+     * Encode a blog post so that it can be stored in the repository.
      *
      * @param   Monal\Blog\Models\BlogPost
      * @return  Array
@@ -124,7 +123,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Decode a Blog Post repository entry into its model class.
+     * Decode a repository entry into a blog post.
      *
      * @param   stdClass
      * @return  Monal\Blog\Models\BlogPost
@@ -147,7 +146,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Retrieve an instance/s from the repository.
+     * Retrieve a blog post/s from the repository.
      *
      * @param   Integer
      * @return  Illuminate\Database\Eloquent\Collection / Monal\Blog\Models\BlogPost
@@ -174,7 +173,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
      * Retrieve a blog post from the repository by its slug.
      *
      * @param   String
-     * @return  Monal\Pages\Models\Page
+     * @return  Monal\Blog\Models\BlogPost / Boolean
      */
     public function retrieveBySlug($slug)
     {
@@ -185,9 +184,9 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Retrieve the latest blog post added to the repository.
+     * Retrieve the most recent blog post added to the repository.
      *
-     * @return  Monal\Pages\Models\Page / Boolean
+     * @return  Monal\Blog\Models\BlogPost / Boolean
      */
     public function retrieveLatest()
     {
@@ -198,7 +197,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Write a Blog Post model to the repository.
+     * Write a blog post to the repository.
      *
      * @param   Monal\Blog\Models\BlogPost
      * @return  Boolean
