@@ -155,7 +155,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     {
         $query = \DB::table($this->table);
         if (!$key) {
-            $results = $query->select('*')->get();
+            $results = $query->select('*')->orderBy('created_at', 'desc')->get();
             $blog_posts = \App::make('Illuminate\Database\Eloquent\Collection');
             foreach ($results as $result) {
                 $blog_posts->add($this->decodeFromStorage($result));
