@@ -16,7 +16,7 @@ interface BlogPostsRepository
      * Return a new blog post model.
      *
      * @return  Monal\Blog\Models\BlogPost
-     *
+     */
     public function newModel();
 
     /**
@@ -26,22 +26,6 @@ interface BlogPostsRepository
      * @return  Boolean
      */
     public function validatesForStorage(BlogPost $post);
-
-    /**
-     * Encode a blog post so that it can be stored in the repository.
-     *
-     * @param   Monal\Blog\Models\BlogPost
-     * @return  Array
-     */
-    protected function encodeForStorage(BlogPost $post);
-
-    /**
-     * Decode a repository entry into a blog post.
-     *
-     * @param   stdClass
-     * @return  Monal\Blog\Models\BlogPost
-     */
-    protected function decodeFromStorage($result);
 
     /**
      * Retrieve a blog post/s from the repository.
