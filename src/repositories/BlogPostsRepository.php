@@ -57,7 +57,7 @@ interface BlogPostsRepository
      * @param   DateTime
      * @return  Illuminate\Database\Eloquent\Collection
      */
-    public function retrievePostsPublishedBetween(\DateTime $from, \DateTime $to)
+    public function retrievePostsPublishedBetween(\DateTime $from, \DateTime $to);
 
     /**
      * Write a blog post to the repository.
