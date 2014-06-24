@@ -59,3 +59,11 @@ Route::get(
 		'uses' => 'FrontendBlogController@post',
 	)
 );
+
+Route::get(
+	Config::get('blog::settings.slug') . '/{year}/{month}',
+	array(
+		'as' => 'blog',
+		'uses' => 'FrontendBlogController@postsByMonth',
+	)
+);
