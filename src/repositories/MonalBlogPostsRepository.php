@@ -197,6 +197,33 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
+     * Retrieve all blog posts published between to given dates.
+     *
+     * @param   DateTime
+     * @param   DateTime
+     * @return  Illuminate\Database\Eloquent\Collection
+     */
+    public function retrievePostsPublishedBetween(\DateTime $from, \DateTime $to)
+    {
+        $results = \DB::table($this->table)
+            ->whereBetween(
+                'created_at',
+                array(
+                    $from->format('Y-m-d H:i:s'),
+                    $to->format('Y-m-d H:i:s')
+                )
+            )
+            ->get();
+        $posts = \App::make('Illuminate\Database\Eloquent\Collection');
+        if ($results) {
+            foreach ($results as $result) {
+                $posts->add($this->decodeFromStorage($result));
+            }
+        }
+        return $posts;
+    }
+
+    /**
      * Write a blog post to the repository.
      *
      * @param   Monal\Blog\Models\BlogPost

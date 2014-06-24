@@ -51,6 +51,15 @@ interface BlogPostsRepository
     public function retrieveLatest();
 
     /**
+     * Retrieve all blog posts published between to given dates.
+     *
+     * @param   DateTime
+     * @param   DateTime
+     * @return  Illuminate\Database\Eloquent\Collection
+     */
+    public function retrievePostsPublishedBetween(\DateTime $from, \DateTime $to)
+
+    /**
      * Write a blog post to the repository.
      *
      * @param   Monal\Blog\Models\BlogPost
