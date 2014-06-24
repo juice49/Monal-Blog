@@ -68,6 +68,7 @@ class BlogServiceProvider extends ServiceProvider implements MonalPackageService
 		$loader = \Illuminate\Foundation\AliasLoader::getInstance();
 		$loader->alias('BlogCategoriesRepository', 'Monal\Blog\Facades\BlogCategoriesRepository');
 		$loader->alias('BlogPostsRepository', 'Monal\Blog\Facades\BlogPostsRepository');
+		$loader->alias('Blog', 'Monal\Blog\Facades\Blog');
 	}
 
 	/**
@@ -124,6 +125,10 @@ class BlogServiceProvider extends ServiceProvider implements MonalPackageService
 		$this->app['BlogCategoriesRepository'] = $this->app->share(
 			function ($app) {
 				return \App::make('Monal\Blog\Repositories\BlogCategoriesRepository');
+			}
+		);$this->app['Blog'] = $this->app->share(
+			function ($app) {
+				return \App::make('Monal\Blog\Libraries\Blog');
 			}
 		);
 	}
