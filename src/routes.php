@@ -44,7 +44,7 @@ Monal\API\Routes::addAdminRoute(
 );
 
 // Frontend routes.
-Route::get(
+Route::any(
 	Config::get('blog::settings.slug'),
 	array(
 		'as' => 'blog',
@@ -52,7 +52,7 @@ Route::get(
 	)
 );
 
-Route::get(
+Route::any(
 	Config::get('blog::settings.slug') . '/{slug}',
 	array(
 		'as' => 'blog',
@@ -60,7 +60,7 @@ Route::get(
 	)
 );
 
-Route::get(
+Route::any(
 	Config::get('blog::settings.slug') . '/{year}/{month}',
 	array(
 		'as' => 'blog',
