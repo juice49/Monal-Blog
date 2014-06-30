@@ -25,7 +25,7 @@ class MonalFrontendBlogIndex implements ToPage
      */
     public function __construct()
     {
-        $this->slug = \Config::get('blog::settings.slug');
+        $this->slug = \Config::get('blog::config.slug');
     }
 
     /**
