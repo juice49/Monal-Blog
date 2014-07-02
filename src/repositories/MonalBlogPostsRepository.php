@@ -44,7 +44,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
         // Create body component
         $body_data_set = \DataSetTemplatesRepository::newModel();
         $body_data_set->setComponent(\Components::makeTemplate('wysiwyg'));
-        $body_data_set->component()->setSettings(array('type' => 'standard'));
+        $body_data_set->component()->setSettings(array('type' => 'Standard'));
         $post_template->addDataSetTemplate($body_data_set);
 
         return \App::make('Monal\Blog\Models\BlogPost', array($post_template));
