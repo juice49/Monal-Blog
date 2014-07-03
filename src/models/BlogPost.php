@@ -3,8 +3,7 @@ namespace Monal\Blog\Models;
 /**
  * Blog Post.
  *
- * This defines the interface a model of a blog post should
- * implement.
+ * A contract that a blog post model must implement to be valid.
  *
  * @author  Arran Jacques
  */
@@ -17,6 +16,9 @@ interface BlogPost
      * Constructor.
      *
      * @param   Monal\Data\Models\DataStreamTemplate
+     *          The data stream template from which we are going to build
+     *          the blog post.
+     *
      * @return  Void
      */
     public function __construct(DataStreamTemplate $template);
@@ -43,14 +45,15 @@ interface BlogPost
     public function slug();
 
     /**
-     * Return the blog post's categories.
+     * Return a collection of IDs that correspond to categories that the
+     * post belongs to.
      *
-     * @return  String
+     * @return  Illuminate\Database\Eloquent\Collection
      */
     public function categories();
 
     /**
-     * Return the data sets that make up the blog post.
+     * Return a collection of data sets that make up the blog post.
      *
      * @return  Illuminate\Database\Eloquent\Collection
      */
@@ -149,22 +152,16 @@ interface BlogPost
     public function setCreatedAtDate(\DateTime $date);
 
     /**
-     * Set the blog post's URL.
-     *
-     * @param   String
-     * @return  Void
-     */
-    public function setURL($url);
-
-    /**
-     * Return an array of CSS files the blog post needs to work.
+     * Return an array of stylesheets the post requires for it’s view to
+     * display correctly.
      *
      * @return  Array
      */
     public function css();
 
     /**
-     * Return an array of JS files the blog post needs to work.
+     * Return an array of scripts the post requires for it’s view to
+     * function correctly.
      *
      * @return  Array
      */

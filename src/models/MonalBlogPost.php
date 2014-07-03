@@ -16,93 +16,44 @@ use Monal\Data\Models\DataStreamTemplate;
 class MonalBlogPost extends Model implements BlogPost, ToPage
 {
     /**
-     * The blog post's ID.
+     * An array of the blog post’s properties.
      *
-     * @var     Integer
+     * @var     Array
      */
-    protected $id = null;
-
-    /**
-     * The blog post's title.
-     *
-     * @var     String
-     */
-    protected $title = null;
-
-    /**
-     * The blog post's slug.
-     *
-     * @var     String
-     */
-    protected $slug = null;
-
-    /**
-     * A collection of categories the blog post belongs to.
-     *
-     * @var     Illuminate\Database\Eloquent\Collection
-     */
-    protected $categories = null;
-
-    /**
-     * A collection of data sets that make up the blog post.
-     *
-     * @var     Illuminate\Database\Eloquent\Collection
-     */
-    protected $data_sets = null;
-
-    /**
-     * The ID of the user who created to post.
-     *
-     * @var     Integer
-     */
-    protected $user = null;
-
-    /**
-     * The blog post's description.
-     *
-     * @var     String
-     */
-    protected $description = null;
-
-    /**
-     * The blog post's keywords.
-     *
-     * @var     String
-     */
-    protected $keywords = null;
-
-    /**
-     * A DateTime object of the date and time that the post was created
-     * at.
-     *
-     * @var     DateTime
-     */
-    protected $created_at = null;
-
-    /**
-     * The blog post's URL.
-     *
-     * @var     String
-     */
-    protected $url = null;
+    protected $properties = array();
 
     /**
      * Constructor.
      *
      * @param   Monal\Data\Models\DataStreamTemplate
+     *          The data stream template from which we are going to build
+     *          the blog post.
+     *
      * @return  Void
      */
     public function __construct(DataStreamTemplate $template)
     {   
         parent::__construct();
-        $this->categories = \App::make('Illuminate\Database\Eloquent\Collection');
-        $this->data_sets = \App::make('Illuminate\Database\Eloquent\Collection');
+
+        // Set default values for the post's properties.
+        $this->properties['id'] = null;
+        $this->properties['title'] = null;
+        $this->properties['slug'] = null;
+        $this->properties['categories'] = \App::make('Illuminate\Database\Eloquent\Collection');
+        $this->properties['data_sets'] = \App::make('Illuminate\Database\Eloquent\Collection');;
+        $this->properties['user'] = null;
+        $this->properties['description'] = null;
+        $this->properties['keywords'] = null;
+        $this->properties['created_at'] = null;
+
+        // Use the data stream template passed to the constructor too set the
+        // data sets that will make up the post.
         foreach ($template->dataSetTemplates() as $data_set_template) {
-            $this->data_sets->add(\DataSetsRepository::newModel($data_set_template));
+            $this->properties['data_sets']->add(\DataSetsRepository::newModel($data_set_template));
         }
-        $this->data_sets[0]->setName('Images');
-        $this->data_sets[1]->setName('Intro');
-        $this->data_sets[2]->setName('Body');
+        $this->properties['data_sets'][0]->setName('Images');
+        $this->properties['data_sets'][1]->setName('Intro');
+        $this->properties['data_sets'][2]->setName('Body');
     }
 
     /**
@@ -112,7 +63,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function ID()
     {
-        return $this->id;
+        return $this->properties['id'];
     }
 
     /**
@@ -122,7 +73,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function title()
     {
-        return $this->title;
+        return $this->properties['title'];
     }
 
     /**
@@ -132,16 +83,17 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function slug()
     {
-        if (!$this->slug OR $this->slug == '') {
-            return \Str::slug($this->title);
+        if (!$this->properties['slug'] OR $this->properties['slug'] == '') {
+            return \Str::slug($this->properties['title']);
         }
-        return strtolower($this->slug);
+        return strtolower($this->properties['slug']);
     }
 
     /**
-     * Return the blog post's categories.
+     * Return a collection of IDs that correspond to categories that the
+     * post belongs to.
      *
-     * @return  String
+     * @return  Illuminate\Database\Eloquent\Collection
      */
     public function categories()
     {
@@ -149,13 +101,13 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     }
 
     /**
-     * Return the data sets that make up the blog post.
+     * Return a collection of data sets that make up the blog post.
      *
      * @return  Illuminate\Database\Eloquent\Collection
      */
     public function dataSets()
     {
-        return $this->data_sets;
+        return $this->properties['data_sets'];
     }
 
     /**
@@ -165,7 +117,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function user()
     {
-        return $this->user;
+        return $this->properties['user'];
     }
 
     /**
@@ -175,7 +127,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function description()
     {
-        return $this->description;
+        return $this->properties['description'];
     }
 
     /**
@@ -185,7 +137,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function keywords()
     {
-        return $this->keywords;
+        return $this->properties['keywords'];
     }
 
     /**
@@ -196,7 +148,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function createdAt()
     {
-        return $this->created_at;
+        return $this->properties['created_at'];
     }
 
     /**
@@ -206,7 +158,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function URL()
     {
-        return $this->url;
+        return \URL::to(\Config::get('blog::config.slug') . '/' . $this->properties['slug']);
     }
 
     /**
@@ -217,7 +169,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function setID($id)
     {
-        $this->id = (integer) $id;
+        $this->properties['id'] = (integer) $id;
     }
 
     /**
@@ -228,7 +180,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->properties['title'] = (string) $title;
     }
 
     /**
@@ -239,7 +191,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function setSlug($slug)
     {
-        $this->slug = $slug;
+        $this->properties['slug'] = (string) $slug;
     }
 
     /**
@@ -250,7 +202,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function setUser($user_id)
     {
-        $this->user = $user_id;
+        $this->properties['user'] = (int) $user_id;
     }
 
     /**
@@ -261,7 +213,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function setDescription($description)
     {
-        $this->description = $description;
+        $this->properties['description'] = (string) $description;
     }
 
     /**
@@ -272,7 +224,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function setKeywords($keywords)
     {
-        $this->keywords = $keywords;
+        $this->properties['keywords'] = (string) $keywords;
     }
 
     /**
@@ -283,43 +235,34 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function setCreatedAtDate(\DateTime $date)
     {
-        $this->created_at = $date;
+        $this->properties['created_at'] = $date;
     }
 
     /**
-     * Set the blog post's URL.
-     *
-     * @param   String
-     * @return  Void
-     */
-    public function setURL($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     * Return an array of CSS files the blog post needs to work.
+     * Return an array of stylesheets the post requires for it’s view to
+     * display correctly.
      *
      * @return  Array
      */
     public function css()
     {
         $css = array();
-        foreach ($this->data_sets as $data_set) {
+        foreach ($this->properties['data_sets'] as $data_set) {
             $css = array_merge($css, $data_set->component()->css());
         }
         return $css;
     }
 
     /**
-     * Return an array of JS files the blog post needs to work.
+     * Return an array of scripts the post requires for it’s view to
+     * function correctly.
      *
      * @return  Array
      */
     public function scripts()
     {
         $scripts = array();
-        foreach ($this->data_sets as $data_set) {
+        foreach ($this->properties['data_sets'] as $data_set) {
             $scripts = array_merge($scripts, $data_set->component()->scripts());
         }
         return $scripts;
@@ -336,16 +279,18 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     {
         // Build the data to validate.
         $data = array(
-            'title' => $this->title,
+            'title' => $this->properties['title'],
             'slug' => $this->slug(),
-            'user' => $this->user,
+            'user' => $this->properties['user'],
         );
 
-        // Validate the blog title against the given rules.
+        // Validate the blog title against the provided rules.
         $validation = \Validator::make($data, $validation_rules, $validation_messages);
         if ($validation->passes()) {
             return true;
         } else {
+            //If the post fails the validation check then merge the validation
+            // error messages into the posts messages.
             $this->messages->merge($validation->messages());
             return false;
         }
@@ -359,22 +304,18 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
      */
     public function view(array $settings = array())
     {
-        // Build blog post object for view.
-        $post = new \stdClass;
-        $post->title = $this->title;
-        $post->slug = $this->slug;
-        $post->categories = $this->categories;
-        $post->data_sets = $this->data_sets;
+        $post = $this->properties;
 
-        // Get additional data required for the view.
+        // Get all available blog categories.
         $categories = \BlogCategoriesRepository::retrieve();
 
-        // Define view settings.
+        // Define the view’s settings using those passed into the function.
         $show_validation = isset($settings['show_validation']) ? $settings['show_validation'] : false;
 
         // Get the blog posts's messages.
         $messages = $this->messages;
 
+        // Build and return a view of the model.
         return \View::make(
             'blog::models.post',
             compact(

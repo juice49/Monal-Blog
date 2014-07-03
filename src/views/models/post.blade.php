@@ -11,12 +11,12 @@
 	@endif
 	<div class="control_block">
 		{{ Form::label('title', 'Title', array('class' => 'label label--block')) }}
-		{{ Form::input('text', 'title', $post->title, array('class' => 'js--name input__text')) }}
+		{{ Form::input('text', 'title', $post['title'], array('class' => 'js--name input__text')) }}
 	</div>
 	<div class="control_block">
 		{{ Form::label('slug', 'Slug', array('class' => 'label label--block')) }}
 		<label for="slug" class="label label--block label--description">By default the posts's slug will be its title; however you can override this by specifying a custom slug below.</label>
-		{{ Form::input('slug', 'slug', $post->slug, array('class' => 'js--slug input__text')) }}
+		{{ Form::input('slug', 'slug', $post['slug'], array('class' => 'js--slug input__text')) }}
 	</div>
 	<div class="control_block">
 		{{ Form::label('url', 'URL', array('class' => 'label label--block')) }}
@@ -32,7 +32,7 @@
 	</div>
 </div>
 
-@foreach ($post->data_sets as $data_set)
+@foreach ($post['data_sets'] as $data_set)
 	{{ $data_set->view() }}
 @endforeach
 
