@@ -9,6 +9,7 @@ namespace Monal\Blog\Models;
  */
 
 use Monal\Data\Models\DataStreamTemplate;
+use Monal\Blog\Models\BlogCategory;
 
 interface BlogPost
 {
@@ -45,8 +46,7 @@ interface BlogPost
     public function slug();
 
     /**
-     * Return a collection of IDs that correspond to categories that the
-     * post belongs to.
+     * Return a collection of categories that the blog post belongs to.
      *
      * @return  Illuminate\Database\Eloquent\Collection
      */
@@ -150,6 +150,14 @@ interface BlogPost
      * @return  Void
      */
     public function setCreatedAtDate(\DateTime $date);
+
+    /**
+     * Add a new category which the blog post will belong to.
+     *
+     * @param   Monal\Blog\Models\BlogCategory
+     * @return  Void
+     */
+    public function addCategory(BlogCategory $category);
 
     /**
      * Return an array of stylesheets the post requires for it’s view to

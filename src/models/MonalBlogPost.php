@@ -3,7 +3,7 @@ namespace Monal\Blog\Models;
 /**
  * Blog Post.
  *
- * This is a working implementation of the BlogPost model.
+ * A model of a blog post.
  *
  * @author  Arran Jacques
  */
@@ -12,6 +12,7 @@ use Monal\Models\Model;
 use Monal\Blog\Models\BlogPost;
 use Monal\Blog\Models\ToPage;
 use Monal\Data\Models\DataStreamTemplate;
+use Monal\Blog\Models\BlogCategory;
 
 class MonalBlogPost extends Model implements BlogPost, ToPage
 {
@@ -39,8 +40,8 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
         $this->properties['id'] = null;
         $this->properties['title'] = null;
         $this->properties['slug'] = null;
-        $this->properties['categories'] = \App::make('Illuminate\Database\Eloquent\Collection');
-        $this->properties['data_sets'] = \App::make('Illuminate\Database\Eloquent\Collection');;
+        $this->properties['categories'] = array();
+        $this->properties['data_sets'] = \App::make('Illuminate\Database\Eloquent\Collection');
         $this->properties['user'] = null;
         $this->properties['description'] = null;
         $this->properties['keywords'] = null;
@@ -90,14 +91,13 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     }
 
     /**
-     * Return a collection of IDs that correspond to categories that the
-     * post belongs to.
+     * Return a collection of categories that the blog post belongs to.
      *
      * @return  Illuminate\Database\Eloquent\Collection
      */
     public function categories()
     {
-        return null;
+        return \App::make('Illuminate\Database\Eloquent\Collection', array($this->properties['categories']));
     }
 
     /**
@@ -239,6 +239,20 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     }
 
     /**
+     * Add a new category which the blog post will belong to.
+     *
+     * @param   Monal\Blog\Models\BlogCategory
+     * @return  Void
+     */
+    public function addCategory(BlogCategory $category)
+    {
+        // Make sure the same category isn’t added multiple times.
+        if (!in_array($category, $this->properties['categories'])) {
+            array_push($this->properties['categories'], $category);
+        }
+    }
+
+    /**
      * Return an array of stylesheets the post requires for it’s view to
      * display correctly.
      *
@@ -306,6 +320,12 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     {
         $post = $this->properties;
 
+        // Build the category ID string.
+        $category_ids = '';
+        foreach ($post['categories'] as $category) {
+            $category_ids .= $category->ID() . ',';
+        }
+
         // Get all available blog categories.
         $categories = \BlogCategoriesRepository::retrieve();
 
@@ -321,6 +341,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
             compact(
                 'messages',
                 'post',
+                'category_ids',
                 'show_validation',
                 'categories'
             )
