@@ -15,18 +15,23 @@ use Monal\Blog\Models\BlogCategory;
 class MonalBlogCategory extends Model implements BlogCategory
 {
     /**
-     * The blog category's ID.
+     * The blog category's properties.
      *
      * @var     Integer
      */
-    protected $id = null;
+    protected $properties = array();
 
     /**
-     * The blog category's name.
+     * Constructor.
      *
-     * @var     String
+     * @return  Void
      */
-    protected $name = null;
+    public function __construct()
+    {
+        // Set the categories's fixed properties.
+        $this->properties['id'] = null;
+        $this->properties['name'] = null;
+    }
 
     /**
      * Return the blog category's ID.
@@ -35,7 +40,7 @@ class MonalBlogCategory extends Model implements BlogCategory
      */
     public function ID()
     {
-        return $this->id;
+        return $this->properties['id'];
     }
 
     /**
@@ -45,7 +50,7 @@ class MonalBlogCategory extends Model implements BlogCategory
      */
     public function name()
     {
-        return $this->name;
+        return $this->properties['name'];
     }
 
     /**
@@ -56,7 +61,7 @@ class MonalBlogCategory extends Model implements BlogCategory
      */
     public function setID($id)
     {
-        $this->id = (integer) $id;
+        $this->properties['id'] = (integer) $id;
     }
 
     /**
@@ -67,7 +72,7 @@ class MonalBlogCategory extends Model implements BlogCategory
      */
     public function setName($name)
     {
-        $this->name = $name;
+        $this->properties['name'] = $name;
     }
 
     /**
@@ -79,13 +84,8 @@ class MonalBlogCategory extends Model implements BlogCategory
      */
     public function validates(array $validation_rules = array(), array $validation_messages = array())
     {
-        // Build the data to validate.
-        $data = array(
-            'name' => $this->name
-        );
-
         // Validate the blog category against the given rules.
-        $validation = \Validator::make($data, $validation_rules, $validation_messages);
+        $validation = \Validator::make($this->properties, $validation_rules, $validation_messages);
         if ($validation->passes()) {
             return true;
         } else {
@@ -102,16 +102,15 @@ class MonalBlogCategory extends Model implements BlogCategory
      */
     public function view(array $settings = array())
     {
-        // Build blog category object for view.
-        $category = new \stdClass;
-        $category->name = $this->name;
+        $category = $this->properties;
 
-        // Define view settings.
+        // Define the view’s settings using those passed as a param.
         $show_validation = isset($settings['show_validation']) ? $settings['show_validation'] : false;
 
         // Get the blog category's messages.
         $messages = $this->messages;
 
+        // Build and return a view of the blog category.
         return \View::make(
             'blog::models.category',
             compact(

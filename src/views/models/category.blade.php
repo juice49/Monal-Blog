@@ -11,6 +11,6 @@
 	@endif
 	<div class="control_block">
 		{{ Form::label('name', 'Name', array('class' => 'label label--block')) }}
-		{{ Form::input('text', 'name', $category->name, array('class' => 'input__text')) }}
+		{{ Form::input('text', 'name', $category['name'], array('class' => 'input__text')) }}
 	</div>
 </div>
