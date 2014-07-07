@@ -1,13 +1,15 @@
 <?php
-namespace Monal\Blog\Models;
 /**
  * Frontend Blog Post.
  *
- * A model of a Frontend Blog Post. This is a contract for
- * implementations of this model to follow.
+ * An interface for a model of a blog post. The interface defines a
+ * structure for the blog post that keeps it focused towards use in
+ * front-end views.
  *
  * @author	Arran Jacques
  */
+
+namespace Monal\Blog\Models;
 
 use Monal\Blog\Models\BlogPost;
 
@@ -22,7 +24,7 @@ interface FrontendBlogPost
     public function __construct(BlogPost $post);
 
     /**
-     * Return the post's slug.
+     * Return the post's ID.
      *
      * @return  String
      */

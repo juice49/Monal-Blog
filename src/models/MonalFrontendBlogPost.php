@@ -1,12 +1,13 @@
 <?php
-namespace Monal\Blog\Models;
 /**
- * Frontend Blog Post.
+ * Monal Frontend Blog Post.
  *
- * This is a working implementation of the FrontendBlogPost model.
+ * An implementation of the FrontendBlogPost model interface.
  *
  * @author  Arran Jacques
  */
+
+namespace Monal\Blog\Models;
 
 use Monal\Blog\Models\FrontendBlogPost;
 use Monal\Blog\Models\BlogPost;
@@ -28,6 +29,7 @@ class MonalFrontendBlogPost implements FrontendBlogPost
      */
     public function __construct(BlogPost $post)
     {
+        // Set the post's fixed properties.
         $this->properties['id'] = $post->ID();
         $this->properties['slug'] = $post->slug();
         $this->properties['uri'] = $post->URI();
@@ -35,6 +37,7 @@ class MonalFrontendBlogPost implements FrontendBlogPost
         $this->properties['created_at'] = $post->createdAt();
         $this->properties['data_sets'] = new \stdClass;
 
+        // Set the post’s dynamic data sets.
         foreach ($post->dataSets() as $data_set) {
             $value = $data_set->component()->prepareValuesForOutput();
             $this->properties['data_sets']->{\Text::snakeCaseString($data_set->name())} = $value;
@@ -42,7 +45,7 @@ class MonalFrontendBlogPost implements FrontendBlogPost
     }
 
     /**
-     * Return the post's slug.
+     * Return the post's ID.
      *
      * @return  String
      */
