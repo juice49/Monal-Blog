@@ -1,12 +1,13 @@
 <?php
-namespace Monal\Blog\Models;
 /**
- * Blog Category.
+ * Monal Blog Category.
  *
- * This is a working implementation of the BlogCategory model.
+ * An implementation of the BlogCategory model interface.
  *
  * @author  Arran Jacques
  */
+
+namespace Monal\Blog\Models;
 
 use Monal\Models\Model;
 use Monal\Blog\Models\BlogCategory;
@@ -94,7 +95,7 @@ class MonalBlogCategory extends Model implements BlogCategory
     }
 
     /**
-     * Return a view of the model.
+     * Return a view of the blog category.
      *
      * @param   Array
      * @return  Illuminate\View\View

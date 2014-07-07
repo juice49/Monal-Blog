@@ -1,13 +1,15 @@
 <?php
-namespace Monal\Blog\Models;
 /**
- * Blog Category.
+ *  Blog Category.
  *
- * This defines the interface a model of a blog category should
- * implement.
+ * An interface for a model of a blog category. The interface defines
+ * a structure for the blog category that ensures all necessary
+ * properties that make up a blog category can be set and returned.
  *
  * @author  Arran Jacques
  */
+
+namespace Monal\Blog\Models;
 
 interface BlogCategory
 {
@@ -51,7 +53,7 @@ interface BlogCategory
     public function validates(array $validation_rules = array(), array $validation_messages = array());
 
     /**
-     * Return a view of the model.
+     * Return a view of the blog category.
      *
      * @param   Array
      * @return  Illuminate\View\View
