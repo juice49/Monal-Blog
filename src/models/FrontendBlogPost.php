@@ -22,11 +22,11 @@ interface FrontendBlogPost
     public function __construct(BlogPost $post);
 
     /**
-     * Return the post's title.
+     * Return the post's slug.
      *
      * @return  String
      */
-    public function title();
+    public function ID();
 
     /**
      * Return the post's slug.
@@ -34,6 +34,27 @@ interface FrontendBlogPost
      * @return  String
      */
     public function slug();
+
+    /**
+     * Return the post's URI.
+     *
+     * @return  String
+     */
+    public function URI();
+
+    /**
+     * Return the post's title.
+     *
+     * @return  String
+     */
+    public function title();
+
+    /**
+     * Return the date the post was created at.
+     *
+     * @return  DateTime
+     */
+    public function createdAt();
 
     /**
      * Return the post's data sets.
@@ -48,12 +69,4 @@ interface FrontendBlogPost
      * @return  String
      */
     public function URL();
-
-    /**
-     * Return a DateTime object of the date and time that the post was
-     * created at.
-     *
-     * @return  DateTime
-     */
-    public function createdAt();
 }

@@ -10,11 +10,11 @@ namespace Monal\Blog\Models;
 
 use Monal\Models\Model;
 use Monal\Blog\Models\BlogPost;
-use Monal\Blog\Models\ToPage;
+use Monal\Models\PageTemplateInterface;
 use Monal\Data\Models\DataStreamTemplate;
 use Monal\Blog\Models\BlogCategory;
 
-class MonalBlogPost extends Model implements BlogPost, ToPage
+class MonalBlogPost extends Model implements BlogPost, PageTemplateInterface
 {
     /**
      * An array of the blog post’s properties.
@@ -38,10 +38,11 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
 
         // Set default values for the post's properties.
         $this->properties['id'] = null;
-        $this->properties['title'] = null;
         $this->properties['slug'] = null;
+        $this->properties['uri'] = null;
+        $this->properties['title'] = null;
         $this->properties['categories'] = array();
-        $this->properties['data_sets'] = \App::make('Illuminate\Database\Eloquent\Collection');
+        $this->properties['data_sets'] = array();
         $this->properties['user'] = null;
         $this->properties['description'] = null;
         $this->properties['keywords'] = null;
@@ -50,7 +51,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
         // Use the data stream template passed to the constructor too set the
         // data sets that will make up the post.
         foreach ($template->dataSetTemplates() as $data_set_template) {
-            $this->properties['data_sets']->add(\DataSetsRepository::newModel($data_set_template));
+            $this->properties['data_sets'][] = \DataSetsRepository::newModel($data_set_template);
         }
         $this->properties['data_sets'][0]->setName('Images');
         $this->properties['data_sets'][1]->setName('Intro');
@@ -68,16 +69,6 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     }
 
     /**
-     * Return the blog post's title.
-     *
-     * @return  String
-     */
-    public function title()
-    {
-        return $this->properties['title'];
-    }
-
-    /**
      * Return the blog post's slug.
      *
      * @return  String
@@ -91,33 +82,23 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     }
 
     /**
-     * Return a collection of categories that the blog post belongs to.
+     * Return the blog post's URI.
      *
-     * @return  Illuminate\Database\Eloquent\Collection
+     * @return  String
      */
-    public function categories()
+    public function URI()
     {
-        return \App::make('Illuminate\Database\Eloquent\Collection', array($this->properties['categories']));
+        return $this->properties['uri'];
     }
 
     /**
-     * Return a collection of data sets that make up the blog post.
+     * Return the blog post's title.
      *
-     * @return  Illuminate\Database\Eloquent\Collection
+     * @return  String
      */
-    public function dataSets()
+    public function title()
     {
-        return $this->properties['data_sets'];
-    }
-
-    /**
-     * Return the ID of the user who created the blog post.
-     *
-     * @return  Integer
-     */
-    public function user()
-    {
-        return $this->properties['user'];
+        return $this->properties['title'];
     }
 
     /**
@@ -141,6 +122,36 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     }
 
     /**
+     * Return a collection of categories that the blog post belongs to.
+     *
+     * @return  Illuminate\Database\Eloquent\Collection
+     */
+    public function categories()
+    {
+        return \App::make('Illuminate\Database\Eloquent\Collection', array($this->properties['categories']));
+    }
+
+    /**
+     * Return a collection of data sets that make up the blog post.
+     *
+     * @return  Illuminate\Database\Eloquent\Collection
+     */
+    public function dataSets()
+    {
+        return \App::make('Illuminate\Database\Eloquent\Collection', array($this->properties['data_sets']));
+    }
+
+    /**
+     * Return the ID of the user who created the blog post.
+     *
+     * @return  Integer
+     */
+    public function user()
+    {
+        return $this->properties['user'];
+    }
+
+    /**
      * Return the date at which the post was created.
      *
      * @return  DateTime
@@ -148,16 +159,6 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     public function createdAt()
     {
         return $this->properties['created_at'];
-    }
-
-    /**
-     * Return the blog post's URL.
-     *
-     * @return  String
-     */
-    public function URL()
-    {
-        return \URL::to(\Config::get('blog::config.slug') . '/' . $this->properties['slug']);
     }
 
     /**
@@ -172,17 +173,6 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     }
 
     /**
-     * Set the blog post's title.
-     *
-     * @param   String
-     * @return  Void
-     */
-    public function setTitle($title)
-    {
-        $this->properties['title'] = (string) $title;
-    }
-
-    /**
      * Set the blog post's slug.
      *
      * @param   String
@@ -194,14 +184,25 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     }
 
     /**
-     * Set the ID of the user who created the post.
+     * Set the blog post's URI.
      *
-     * @param   Integer
+     * @param   String
      * @return  Void
      */
-    public function setUser($user_id)
+    public function setURI($uri)
     {
-        $this->properties['user'] = (int) $user_id;
+        $this->properties['uri'] = (string) $uri;
+    }
+
+    /**
+     * Set the blog post's title.
+     *
+     * @param   String
+     * @return  Void
+     */
+    public function setTitle($title)
+    {
+        $this->properties['title'] = (string) $title;
     }
 
     /**
@@ -224,6 +225,17 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     public function setKeywords($keywords)
     {
         $this->properties['keywords'] = (string) $keywords;
+    }
+
+    /**
+     * Set the ID of the user who created the post.
+     *
+     * @param   Integer
+     * @return  Void
+     */
+    public function setUser($user_id)
+    {
+        $this->properties['user'] = (int) $user_id;
     }
 
     /**

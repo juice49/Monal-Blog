@@ -32,6 +32,20 @@ interface BlogPost
     public function ID();
 
     /**
+     * Return the blog post's slug.
+     *
+     * @return  String
+     */
+    public function slug();
+
+    /**
+     * Return the blog post's URI.
+     *
+     * @return  String
+     */
+    public function URI();
+
+    /**
      * Return the blog post's title.
      *
      * @return  String
@@ -39,11 +53,18 @@ interface BlogPost
     public function title();
 
     /**
-     * Return the blog post's slug.
+     * Return the blog post's description.
      *
      * @return  String
      */
-    public function slug();
+    public function description();
+
+    /**
+     * Return the blog post's keywords.
+     *
+     * @return  String
+     */
+    public function keywords();
 
     /**
      * Return a collection of categories that the blog post belongs to.
@@ -67,32 +88,11 @@ interface BlogPost
     public function user();
 
     /**
-     * Return the blog post's description.
-     *
-     * @return  String
-     */
-    public function description();
-
-    /**
-     * Return the blog post's keywords.
-     *
-     * @return  String
-     */
-    public function keywords();
-
-    /**
      * Return the date at which the post was created.
      *
      * @return  DateTime
      */
     public function createdAt();
-
-    /**
-     * Return the blog post's URL.
-     *
-     * @return  String
-     */
-    public function URL();
 
     /**
      * Set the blog post's ID.
@@ -103,14 +103,6 @@ interface BlogPost
     public function setID($id);
 
     /**
-     * Set the blog post's title.
-     *
-     * @param   String
-     * @return  Void
-     */
-    public function setTitle($title);
-
-    /**
      * Set the blog post's slug.
      *
      * @param   String
@@ -119,12 +111,20 @@ interface BlogPost
     public function setSlug($slug);
 
     /**
-     * Set the ID of the user who created the post.
+     * Set the blog post's URI.
      *
-     * @param   Integer
+     * @param   String
      * @return  Void
      */
-    public function setUser($user_id);
+    public function setURI($uri);
+
+    /**
+     * Set the blog post's title.
+     *
+     * @param   String
+     * @return  Void
+     */
+    public function setTitle($title);
 
     /**
      * Set the blog post's description.
@@ -141,6 +141,14 @@ interface BlogPost
      * @return  Void
      */
     public function setKeywords($keywords);
+
+    /**
+     * Set the ID of the user who created the post.
+     *
+     * @param   Integer
+     * @return  Void
+     */
+    public function setUser($user_id);
 
     /**
      * Set the the date at which the post was created.

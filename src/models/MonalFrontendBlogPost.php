@@ -14,39 +14,11 @@ use Monal\Blog\Models\BlogPost;
 class MonalFrontendBlogPost implements FrontendBlogPost
 {
     /**
-     * The post's title.
+     * The post's properties.
      *
-     * @var     String
+     * @var     Array
      */
-    protected $title = null;
-
-    /**
-     * The post's slug.
-     *
-     * @var     String
-     */
-    protected $slug = null;
-
-    /**
-     * A collection of data sets that make up the blog post.
-     *
-     * @var     stdClass
-     */
-    protected $data_sets = null;
-
-    /**
-     * A unix timestamp of the date the post was created at.
-     *
-     * @var     String
-     */
-    protected $created_at = null;
-
-    /**
-     * The post's URL.
-     *
-     * @var     String
-     */
-    protected $url = null;
+    protected $properties = array();
 
     /**
      * Constructor.
@@ -56,25 +28,27 @@ class MonalFrontendBlogPost implements FrontendBlogPost
      */
     public function __construct(BlogPost $post)
     {
-        $this->title = $post->title();
-        $this->slug = $post->slug();
-        $this->url = $post->URL();
-        $this->created_at = $post->createdAt();
-        $this->data_sets = \App::make('Illuminate\Database\Eloquent\Collection');
+        $this->properties['id'] = $post->ID();
+        $this->properties['slug'] = $post->slug();
+        $this->properties['uri'] = $post->URI();
+        $this->properties['title'] = $post->title();
+        $this->properties['created_at'] = $post->createdAt();
+        $this->properties['data_sets'] = new \stdClass;
+
         foreach ($post->dataSets() as $data_set) {
             $value = $data_set->component()->prepareValuesForOutput();
-            $this->data_sets->{\Text::snakeCaseString($data_set->name())} = $value;
+            $this->properties['data_sets']->{\Text::snakeCaseString($data_set->name())} = $value;
         }
     }
 
     /**
-     * Return the post's title.
+     * Return the post's slug.
      *
      * @return  String
      */
-    public function title()
+    public function ID()
     {
-        return $this->title;
+        return $this->properties['id'];
     }
 
     /**
@@ -84,8 +58,38 @@ class MonalFrontendBlogPost implements FrontendBlogPost
      */
     public function slug()
     {
-        return $this->slug;
+        return $this->properties['title'];
     }
+
+    /**
+     * Return the post's URI.
+     *
+     * @return  String
+     */
+    public function URI()
+    {
+        return $this->properties['uri'];
+    }
+
+    /**
+     * Return the post's title.
+     *
+     * @return  String
+     */
+    public function title()
+    {
+        return $this->properties['title'];
+    }
+
+    /**
+     * Return the date the post was created at.
+     *
+     * @return  DateTime
+     */
+    public function createdAt()
+    {
+        return $this->properties['created_at'];
+    } 
 
     /**
      * Return the post's data sets.
@@ -94,7 +98,7 @@ class MonalFrontendBlogPost implements FrontendBlogPost
      */
     public function dataSets()
     {
-        return $this->data_sets;
+        return $this->properties['data_sets'];
     }
 
     /**
@@ -104,17 +108,6 @@ class MonalFrontendBlogPost implements FrontendBlogPost
      */
     public function URL()
     {
-        return $this->url;
+        return \URL::to($this->properties['uri']);
     }
-
-    /**
-     * Return a DateTime object of the date and time that the post was
-     * created at.
-     *
-     * @return  DateTime
-     */
-    public function createdAt()
-    {
-        return $this->created_at;
-    } 
 }

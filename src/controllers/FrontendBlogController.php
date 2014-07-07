@@ -18,13 +18,14 @@ class FrontendBlogController extends BaseController
      */
     public function blog()
     {
-        // Make a new front end blog page.
-        $page = \App::make(
-            'Monal\Blog\Models\FrontendBlogPage',
-            array(
-                \App::make('Monal\Blog\Models\MonalFrontendBlogIndex'),
-            )
-        );
+        // Build a new page template with the appropriate properties.
+        $page_template = \App::make('Monal\Models\PageTemplate');
+        $page_template->setSlug(\Config::get('blog::slug'));
+        $page_template->setURI(\Config::get('blog::slug'));
+        $page_template->setTitle('Blog');
+
+        // Use the page template to build a new front-end page.
+        $page = \App::make('Monal\Models\Page', array($page_template));;
 
         // Get all of the blog posts.
         $posts = \App::make('Illuminate\Database\Eloquent\Collection');
@@ -32,11 +33,12 @@ class FrontendBlogController extends BaseController
             $posts->add(\App::make('Monal\Blog\Models\FrontendBlogPost', array($post)));
         }
 
+        // Return a view.
         return View::make('theme::blog.blog', compact('page', 'posts'));
     }
 
     /**
-     * Process requests to front-end blog post page.
+     * Blog post front-end page.
      *
      * @param   String
      * @return  Illuminate\View\View
@@ -45,13 +47,17 @@ class FrontendBlogController extends BaseController
     {
         // Get the post from the repository.
         if ($blog_post = \BlogPostsRepository::retrieveBySlug($slug)) {
-            // Make a new front end blog page.
-            $page = \App::make('Monal\Blog\Models\FrontendBlogPage', array($blog_post));
-            // Make a new front end blog post.
+
+            // Make a new front-end page from the blog post.
+            $page = \App::make('Monal\Models\Page', array($blog_post));
+
+            // Make a new front-end blog post.
             $post = \App::make('Monal\Blog\Models\FrontendBlogPost', array($blog_post));
 
+            // Return a view.
             return View::make('theme::blog.post', compact('page', 'post'));
         }
+        // If no post was found then throw a 404 error.
         App::abort('404');
     }
 
@@ -64,15 +70,16 @@ class FrontendBlogController extends BaseController
      */
     public function postsByMonth($year, $month)
     {
-        // Make a new front end blog page.
-        $page = \App::make(
-            'Monal\Blog\Models\FrontendBlogPage',
-            array(
-                \App::make('Monal\Blog\Models\MonalFrontendBlogIndex'),
-            )
-        );
+        // Build a new page template with the appropriate properties.
+        $page_template = \App::make('Monal\Models\PageTemplate');
+        $page_template->setSlug(\Config::get('blog::slug'));
+        $page_template->setURI(\Config::get('blog::slug'));
+        $page_template->setTitle('Blog');
 
-        // Get all blog posts published in the given month.
+        // Use the page template to build a new front-end page.
+        $page = \App::make('Monal\Models\Page', array($page_template));;
+
+        // Get all blog posts published in the requested month.
         $from = new DateTime($year . '-' . $month . '-01 00:00:00');
         $to = new DateTime($from->format('Y-m-t' . ' 23:59:59'));
         $results = BlogPostsRepository::retrievePostsPublishedBetween($from, $to);
@@ -83,8 +90,10 @@ class FrontendBlogController extends BaseController
             $posts->add(\App::make('Monal\Blog\Models\FrontendBlogPost', array($result)));
         }
 
+        // Copy the from var so it can be used on the front end.
         $date = $from;
 
+        // Return a view.
         return View::make('theme::blog.month', compact('page', 'posts', 'year', 'month', 'date'));
     }
 }
