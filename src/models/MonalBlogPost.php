@@ -1,12 +1,13 @@
 <?php
-namespace Monal\Blog\Models;
 /**
- * Blog Post.
+ * Monal Blog Post.
  *
- * A model of a blog post.
+ * An implementation of the BlogPost model interface.
  *
  * @author  Arran Jacques
  */
+
+namespace Monal\Blog\Models;
 
 use Monal\Models\Model;
 use Monal\Blog\Models\BlogPost;
@@ -17,7 +18,7 @@ use Monal\Blog\Models\BlogCategory;
 class MonalBlogPost extends Model implements BlogPost, PageTemplateInterface
 {
     /**
-     * An array of the blog post’s properties.
+     * The blog post’s properties.
      *
      * @var     Array
      */
@@ -27,8 +28,8 @@ class MonalBlogPost extends Model implements BlogPost, PageTemplateInterface
      * Constructor.
      *
      * @param   Monal\Data\Models\DataStreamTemplate
-     *          The data stream template from which we are going to build
-     *          the blog post.
+     *          The data stream template that we will use to build the
+     *          data sets that will make up the blog post.
      *
      * @return  Void
      */
@@ -36,7 +37,7 @@ class MonalBlogPost extends Model implements BlogPost, PageTemplateInterface
     {   
         parent::__construct();
 
-        // Set default values for the post's properties.
+        // Set the post's fixed properties.
         $this->properties['id'] = null;
         $this->properties['slug'] = null;
         $this->properties['uri'] = null;
@@ -48,8 +49,7 @@ class MonalBlogPost extends Model implements BlogPost, PageTemplateInterface
         $this->properties['keywords'] = null;
         $this->properties['created_at'] = null;
 
-        // Use the data stream template passed to the constructor too set the
-        // data sets that will make up the post.
+        // Set the post’s dynamic data sets.
         foreach ($template->dataSetTemplates() as $data_set_template) {
             $this->properties['data_sets'][] = \DataSetsRepository::newModel($data_set_template);
         }
@@ -75,6 +75,8 @@ class MonalBlogPost extends Model implements BlogPost, PageTemplateInterface
      */
     public function slug()
     {
+        // If a slug hasn’t specifically been set then return a slugified
+        // version of the post’s title.
         if (!$this->properties['slug'] OR $this->properties['slug'] == '') {
             return \Str::slug($this->properties['title']);
         }
@@ -264,7 +266,7 @@ class MonalBlogPost extends Model implements BlogPost, PageTemplateInterface
     }
 
     /**
-     * Remove a category from the blog post.
+     * Remove categories that the post currently belongs to.
      *
      * @return  Void
      */
@@ -334,7 +336,7 @@ class MonalBlogPost extends Model implements BlogPost, PageTemplateInterface
     }
 
     /**
-     * Return a view of the model.
+     * Return a view of the blog post.
      *
      * @param   Array
      * @return  Illuminate\View\View
@@ -352,13 +354,13 @@ class MonalBlogPost extends Model implements BlogPost, PageTemplateInterface
         // Get all available blog categories.
         $categories = \BlogCategoriesRepository::retrieve();
 
-        // Define the view’s settings using those passed into the function.
+        // Define the view’s settings using those passed as a param.
         $show_validation = isset($settings['show_validation']) ? $settings['show_validation'] : false;
 
         // Get the blog posts's messages.
         $messages = $this->messages;
 
-        // Build and return a view of the model.
+        // Build and return a view of the blog post.
         return \View::make(
             'blog::models.post',
             compact(

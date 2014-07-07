@@ -1,12 +1,15 @@
 <?php
-namespace Monal\Blog\Models;
 /**
  * Blog Post.
  *
- * A contract that a blog post model must implement to be valid.
+ * An interface for a model of a blog post. The interface defines a
+ * structure for the blog post that ensures all necessary properties
+ * that make up a blog post can be set and returned.
  *
  * @author  Arran Jacques
  */
+
+namespace Monal\Blog\Models;
 
 use Monal\Data\Models\DataStreamTemplate;
 use Monal\Blog\Models\BlogCategory;
@@ -17,8 +20,8 @@ interface BlogPost
      * Constructor.
      *
      * @param   Monal\Data\Models\DataStreamTemplate
-     *          The data stream template from which we are going to build
-     *          the blog post.
+     *          The data stream template that we will use to build the
+     *          data sets that will make up the blog post.
      *
      * @return  Void
      */
@@ -167,7 +170,7 @@ interface BlogPost
     public function addCategory(BlogCategory $category);
 
     /**
-     * Remove a category from the blog post.
+     * Remove categories that the post currently belongs to.
      *
      * @return  Void
      */
@@ -199,7 +202,7 @@ interface BlogPost
     public function validates(array $validation_rules = array(), array $validation_messages = array());
 
     /**
-     * Return a view of the model.
+     * Return a view of the blog post.
      *
      * @param   Array
      * @return  Illuminate\View\View
