@@ -1,12 +1,13 @@
 <?php
-namespace Monal\Blog\Repositories;
 /**
  * Monal Blog Posts Repository.
  *
- * Repository for storing blog posts.
+ * An implementation of the BlogPostsRepository repository interface.
  *
  * @author  Arran Jacques
  */
+
+namespace Monal\Blog\Repositories;
 
 use Monal\Repositories\Repository;
 use Monal\Blog\Repositories\BlogPostRepository;
@@ -51,7 +52,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Check a blog post validates for storage in the repository.
+     * Check blog post blog validates for storage in the repository.
      *
      * @param   Monal\Blog\Models\BlogPost
      * @return  Boolean
@@ -105,7 +106,8 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Encode a blog post so that it can be stored in the repository.
+     * Return the properties of a blog post model in a format that can be
+     * written to the database.
      *
      * @param   Monal\Blog\Models\BlogPost
      * @return  Array
@@ -123,7 +125,8 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Decode a repository entry into a BlogPost model.
+     * Use a set of results returned from a database query to build a new
+     * blog post model.
      *
      * @param   stdClass
      * @return  Monal\Blog\Models\BlogPost
@@ -266,7 +269,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Retrieve a blog post from the repository by its slug.
+     * Retrieve a single blog post from the repository by its slug.
      *
      * @param   String
      * @return  Monal\Blog\Models\BlogPost / Boolean
@@ -280,7 +283,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Retrieve the most recent blog post added to the repository.
+     * Retrieve the latest blog post to be added to the repository.
      *
      * @return  Monal\Blog\Models\BlogPost / Boolean
      */
@@ -293,10 +296,15 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Retrieve all blog posts published between to given dates.
+     * Retrieve all blog posts in the repository that were published
+     * between two given dates.
      *
      * @param   DateTime
+     *          A DateTime object set to the earliest pulished date.
+     *
      * @param   DateTime
+     *          A DateTime object set to the earliest pulished date.
+     *
      * @return  Illuminate\Database\Eloquent\Collection
      */
     public function retrievePostsPublishedBetween(\DateTime $from, \DateTime $to)
@@ -392,7 +400,6 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
                 \DB::table('blog_category_links')->insert($links_to_insert);
             }
 
-            // Blog post was written to the repo successfully.
             return true;
         }
         return false;
