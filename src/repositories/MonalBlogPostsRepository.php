@@ -132,8 +132,9 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     {
         $post = $this->newModel();
         $post->setID($result->id);
-        $post->setTitle($result->title);
         $post->setSlug($result->slug);
+        $post->setURI(\Config::get('blog::slug') . '/' . $result->slug);
+        $post->setTitle($result->title);
         $post->setUser($result->user);
         $post->setDescription($result->description);
         $post->setKeywords($result->keywords);
@@ -272,8 +273,8 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
      */
     public function retrieveBySlug($slug)
     {
-        if ($post = \DB::table($this->table)->where('slug', '=', $slug)->first()) {
-            return $this->decodeFromStorage($post);
+        if ($result = $this->retrieveQuery()->where('slug', '=', $slug)->first()) {
+            return $this->decodeFromStorage($this->collapseResults(array($result))[0]);
         }
         return false;
     }
@@ -285,8 +286,8 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
      */
     public function retrieveLatest()
     {
-        if ($post = \DB::table($this->table)->orderBy('created_at', 'desc')->first()) {
-            return $this->decodeFromStorage($post);
+        if ($result = $this->retrieveQuery()->orderBy('created_at', 'desc')->first()) {
+            return $this->decodeFromStorage($this->collapseResults(array($result))[0]);
         }
         return false;
     }
@@ -300,20 +301,20 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
      */
     public function retrievePostsPublishedBetween(\DateTime $from, \DateTime $to)
     {
-        $results = \DB::table($this->table)
+        $results = $this->retrieveQuery()
             ->whereBetween(
-                'created_at',
+                'blog_posts.created_at',
                 array(
                     $from->format('Y-m-d H:i:s'),
                     $to->format('Y-m-d H:i:s')
                 )
             )
             ->get();
+        // Loop through the returned entries and encode each one into a
+        // BlogPost model.
         $posts = \App::make('Illuminate\Database\Eloquent\Collection');
-        if ($results) {
-            foreach ($results as $result) {
-                $posts->add($this->decodeFromStorage($result));
-            }
+        foreach ($this->collapseResults($results) as $result) {
+            $posts->add($this->decodeFromStorage($result));
         }
         return $posts;
     }
