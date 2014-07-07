@@ -17,7 +17,7 @@ use Monal\Blog\Models\BlogPost;
 interface BlogPostsRepository
 {
     /**
-     * Return the repositorie's messages.
+     * Return the repository's messages.
      *
      * @return  Illuminate\Support\MessageBag
      */
