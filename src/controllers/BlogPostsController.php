@@ -51,15 +51,10 @@ class BlogPostsController extends AdminController
         // If the user has passed input data then use the values to set the
         // values of the blog post’s properties.
         if ($this->input) {
+            $post = BlogHelper::buildBlogPostFromInput($post, $this->input);
             $post->setUser($this->system->user->id);
-            $post->setTitle(isset($this->input['title']) ? $this->input['title'] : null);
-            $post->setSlug(isset($this->input['slug']) ? $this->input['slug'] : null);
-            $data_set_values = \DataSetsHelper::extractDataSetValuesFromInput($this->input);
-            $post->dataSets()[0]->component()->setValues($data_set_values[0]['component_values']);
-            $post->dataSets()[1]->component()->setValues($data_set_values[1]['component_values']);
-            $post->dataSets()[2]->component()->setValues($data_set_values[2]['component_values']);
 
-            // Attempt to write the blog post to the Blog Post Repository.
+            // Attempt to write the blog post to the Blog Posts Repository.
             if (BlogPostsRepository::write($post)) {
 
                 // If the post is successfully written to the repository then flash a
@@ -109,14 +104,9 @@ class BlogPostsController extends AdminController
             // If the user has passed input data then use the values to set the
             // values of the blog post’s properties.
             if ($this->input) {
-                $post->setTitle(isset($this->input['title']) ? $this->input['title'] : null);
-                $post->setSlug(isset($this->input['slug']) ? $this->input['slug'] : null);
-                $data_set_values = \DataSetsHelper::extractDataSetValuesFromInput($this->input);
-                $post->dataSets()[0]->component()->setValues($data_set_values[0]['component_values']);
-                $post->dataSets()[1]->component()->setValues($data_set_values[1]['component_values']);
-                $post->dataSets()[2]->component()->setValues($data_set_values[2]['component_values']);
+                $post = BlogHelper::buildBlogPostFromInput($post, $this->input);
 
-                // Attempt to write the blog post to the Blog Post Repository.
+                // Attempt to write the blog post to the Blog Posts Repository.
                 if (BlogPostsRepository::write($post)) {
 
                     // If the post is successfully written to the repository then flash a

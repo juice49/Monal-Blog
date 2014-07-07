@@ -81,8 +81,7 @@ interface BlogPost
     public function keywords();
 
     /**
-     * Return a DateTime object of the date and time that the post was
-     * created at.
+     * Return the date at which the post was created.
      *
      * @return  DateTime
      */
@@ -144,7 +143,7 @@ interface BlogPost
     public function setKeywords($keywords);
 
     /**
-     * Set a DateTime object of the time the post was created at.
+     * Set the the date at which the post was created.
      *
      * @param   DateTime
      * @return  Void
@@ -152,12 +151,19 @@ interface BlogPost
     public function setCreatedAtDate(\DateTime $date);
 
     /**
-     * Add a new category which the blog post will belong to.
+     * Add a category to the blog post.
      *
      * @param   Monal\Blog\Models\BlogCategory
      * @return  Void
      */
     public function addCategory(BlogCategory $category);
+
+    /**
+     * Remove a category from the blog post.
+     *
+     * @return  Void
+     */
+    public function purgeCategories();
 
     /**
      * Return an array of stylesheets the post requires for it’s view to

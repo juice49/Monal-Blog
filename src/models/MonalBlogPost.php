@@ -141,8 +141,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     }
 
     /**
-     * Return a DateTime object of the date and time that the post was
-     * created at.
+     * Return the date at which the post was created.
      *
      * @return  DateTime
      */
@@ -228,7 +227,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     }
 
     /**
-     * Set a DateTime object of the time the post was created at.
+     * Set the the date at which the post was created.
      *
      * @param   DateTime
      * @return  Void
@@ -239,7 +238,7 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
     }
 
     /**
-     * Add a new category which the blog post will belong to.
+     * Add a category to the blog post.
      *
      * @param   Monal\Blog\Models\BlogCategory
      * @return  Void
@@ -250,6 +249,16 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
         if (!in_array($category, $this->properties['categories'])) {
             array_push($this->properties['categories'], $category);
         }
+    }
+
+    /**
+     * Remove a category from the blog post.
+     *
+     * @return  Void
+     */
+    public function purgeCategories()
+    {
+        $this->properties['categories'] = array();
     }
 
     /**
@@ -298,16 +307,18 @@ class MonalBlogPost extends Model implements BlogPost, ToPage
             'user' => $this->properties['user'],
         );
 
-        // Validate the blog title against the provided rules.
+        // Validate the blog post against the rules passed to the method.
+        $post_validates = false;
         $validation = \Validator::make($data, $validation_rules, $validation_messages);
         if ($validation->passes()) {
-            return true;
+            $post_validates = true;
         } else {
             //If the post fails the validation check then merge the validation
             // error messages into the posts messages.
             $this->messages->merge($validation->messages());
-            return false;
         }
+
+        return $post_validates;
     }
 
     /**

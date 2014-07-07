@@ -123,7 +123,7 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
-     * Decode a repository entry into a blog post.
+     * Decode a repository entry into a BlogPost model.
      *
      * @param   stdClass
      * @return  Monal\Blog\Models\BlogPost
@@ -138,34 +138,130 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
         $post->setDescription($result->description);
         $post->setKeywords($result->keywords);
         $post->setCreatedAtDate(new \DateTime($result->created_at));
+
+        // Add data sets to the post.
         $post->dataSets()[0]->component()->setValueFromStoragePreparedValues($result->images);
         $post->dataSets()[1]->component()->setValueFromStoragePreparedValues($result->intro);
         $post->dataSets()[2]->component()->setValueFromStoragePreparedValues($result->body);
+
+        // Add categories to the post.
+        foreach ($result->categories as $result_category) {
+            $category = \BlogCategoriesRepository::newModel();
+            $category->setID($result_category['id']);
+            $category->setName($result_category['name']);
+            $post->addCategory($category);
+        }
+
         return $post;
+    }
+
+    /**
+     * Return a select query that can be used to retrieve entries from the
+     * repository.
+     *
+     * @return
+     */
+    private function retrieveQuery()
+    {
+        return \DB::table($this->table)
+            ->select(
+                'blog_posts.id',
+                'blog_posts.title',
+                'blog_posts.slug',
+                'blog_posts.images',
+                'blog_posts.intro',
+                'blog_posts.body',
+                'blog_posts.user',
+                'blog_posts.description',
+                'blog_posts.keywords',
+                'blog_posts.created_at',
+                'blog_posts.updated_at',
+
+                'blog_categories.id as category_id',
+                'blog_categories.name as category_name',
+                'blog_categories.created_at as category_created_at',
+                'blog_categories.updated_at as category_updated_at'
+            )
+            ->leftJoin('blog_category_links', 'blog_posts.id', '=', 'blog_category_links.blog_post_id')
+            ->leftJoin('blog_categories', 'blog_category_links.category_id', '=', 'blog_categories.id');
+    }
+
+    /**
+     * Process results returned when using the retrieveQuery() method and
+     * collapse duplicate results into a single result.
+     *
+     * @param   Array
+     *          The array of results to process.
+     *
+     * @return  Array
+     */
+    private function collapseResults(array $results)
+    {
+        $duplicates = array();
+        $collapsed_results = array();
+
+        // Loop through the results and process them.
+        foreach ($results as $result) {
+
+            // If we have already processed a result that has the same ID as the
+            // one we are about to process, then simply add the category
+            // properties from this results to the one we have already processed.
+            if (isset($duplicates[$result->id])) {
+                $collapsed_results[$duplicates[$result->id]]->categories[] = array(
+                    'id' => $result->category_id,
+                    'name' => $result->category_name,
+                );
+            } else {
+
+                // If this is the first time we have come across a result with this ID
+                // add a new category property to it and store it in the
+                // collapsed_results array.
+                $result->categories = array(
+                    0 => array(
+                        'id' => $result->category_id,
+                        'name' => $result->category_name,
+                    )
+                );
+
+                // Make a record that a result with the ID x has already been processed.
+                $duplicates[$result->id] = (array_push($collapsed_results, $result) - 1);
+            }
+        }
+
+        // Return the collapsed results.
+        return $collapsed_results;
     }
 
     /**
      * Retrieve a blog post/s from the repository.
      *
      * @param   Integer
+     *          The ID of the entry you want to retrieve. Leave as null to
+     *          return all entries.
+     *
      * @return  Illuminate\Database\Eloquent\Collection / Monal\Blog\Models\BlogPost
      */
     public function retrieve($key = null)
     {
-        $query = \DB::table($this->table);
+        // If no key has been provided then get all entries in the repo.
         if (!$key) {
-            $results = $query->select('*')->orderBy('created_at', 'desc')->get();
+
+            // Get all entries in the repo.
+            $results = $this->retrieveQuery()->orderBy('created_at', 'desc')->get();
+
+            // Loop through the returned entries and encode each one into a
+            // BlogPost model.
             $blog_posts = \App::make('Illuminate\Database\Eloquent\Collection');
-            foreach ($results as $result) {
+            foreach ($this->collapseResults($results) as $result) {
                 $blog_posts->add($this->decodeFromStorage($result));
             }
             return $blog_posts;
         } else {
-            if ($result = $query->where('id', '=', $key)->first()) {
-                return $this->decodeFromStorage($result);
+            if ($results = $this->retrieveQuery()->where('blog_posts.id', '=', $key)->get()) {
+                return $this->decodeFromStorage($this->collapseResults($results)[0]);
             }
         }
-        return false;
+        return true;
     }
 
     /**
@@ -230,18 +326,73 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
      */
     public function write(BlogPost $post)
     {
+        // Check the blog post validates before writing it to the repo.
         if ($this->validatesForStorage($post)) {
+
+            // If it validates, encode the post and write it to the repo.
             $encoded = $this->encodeForStorage($post);
+
+            // If the blog post has an ID then we will find the post in the repo
+            // with the same ID and overwrite it.
             if ($post->ID()) {
                 $encoded['updated_at'] = date('Y-m-d H:i:s');
                 \DB::table($this->table)->where('id', '=', $post->ID())->update($encoded);
-                return true;
             } else {
+
+                // If the blog post doesn’t have an ID then we will create a new entry
+                // in the repo.
                 $encoded['created_at'] = date('Y-m-d H:i:s');
                 $encoded['updated_at'] = date('Y-m-d H:i:s');
-                \DB::table($this->table)->insert($encoded);
-                return true;
+                $post_id = \DB::table($this->table)->insertGetId($encoded);
+                $post->setID($post_id);
             }
+            
+            // Get all existing category links for the blog post.
+            $category_links = \DB::table('blog_category_links')->where('blog_post_id', '=', $post->ID())->get();
+
+            // Work out if any categories have been removed form the post, and if
+            // so, delete the links from the pivot table.
+            $links_to_delete = array();
+            foreach ($category_links as $link) {
+                $delete_link = true;
+                foreach ($post->categories() as $category) {
+                    if ($link->category_id == $category->ID()) {
+                        $delete_link = false;
+                    }
+                }
+                if ($delete_link) {
+                    array_push($links_to_delete, $link->id);
+                }
+            }
+            if (!empty($links_to_delete)) {
+                \DB::table('blog_category_links')->whereIn('id', $links_to_delete)->delete();
+            }
+
+            // Work out if any categories have been added to the post, and if so,
+            // add a new link to the pivot table.
+            $links_to_insert = array();
+            foreach ($post->categories() as $category) {
+                $insert_link = true;
+                foreach ($category_links as $link) {
+                    if ($link->category_id == $category->ID()) {
+                        $insert_link = false;
+                    }
+                }
+                if ($insert_link) {
+                    array_push($links_to_insert, array(
+                        'blog_post_id' => $post->ID(),
+                        'category_id' => $category->ID(),
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ));
+                }
+            }
+            if (!empty($links_to_insert)) {
+                \DB::table('blog_category_links')->insert($links_to_insert);
+            }
+
+            // Blog post was written to the repo successfully.
+            return true;
         }
         return false;
     }
