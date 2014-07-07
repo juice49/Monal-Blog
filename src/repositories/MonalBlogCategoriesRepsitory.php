@@ -1,12 +1,14 @@
 <?php
-namespace Monal\Blog\Repositories;
 /**
  * Monal Blog Categories Repository.
  *
- * An implementation of the BlogCategoriesRepository.
+ * An implementation of the BlogCategoriesRepository repository
+ * interface.
  *
  * @author  Arran Jacques
  */
+
+namespace Monal\Blog\Repositories;
 
 use Monal\Repositories\Repository;
 use Monal\Blog\Repositories\BlogCategoriesRepository;
@@ -22,7 +24,7 @@ class MonalBlogCategoriesRepository extends Repository implements BlogCategories
     protected $table = 'blog_categories';
 
     /**
-     * Return a new Blog Category model.
+     * Return a new blog category model.
      *
      * @return  Monal\Blog\Models\BlogCategory
      */
@@ -32,7 +34,8 @@ class MonalBlogCategoriesRepository extends Repository implements BlogCategories
     }
 
     /**
-     * Check a Blog Category model validates for storage.
+     * Check blog post category model validates for storage in the
+     * repository.
      *
      * @param   Monal\Blog\Models\BlogCategory
      * @return  Boolean
@@ -68,8 +71,8 @@ class MonalBlogCategoriesRepository extends Repository implements BlogCategories
     }
 
     /**
-     * Encode a Blog Category model so it is ready to be stored in the
-     * repository.
+     * Return the properties of a blog category model in a format that can
+     * be written to the database.
      *
      * @param   Monal\Blog\Models\BlogCategory
      * @return  Array
@@ -82,7 +85,8 @@ class MonalBlogCategoriesRepository extends Repository implements BlogCategories
     }
 
     /**
-     * Decode a Blog Category repository entry into its model class.
+     * Use a set of results returned from a database query to build a new
+     * blog category model.
      *
      * @param   stdClass
      * @return  Monal\Blog\Models\BlogCategory
@@ -120,7 +124,7 @@ class MonalBlogCategoriesRepository extends Repository implements BlogCategories
     }
 
     /**
-     * Write a Blog Category model to the repository.
+     * Write a blog category model to the repository.
      *
      * @param   Monal\Blog\Models\BlogCategory
      * @return  Boolean

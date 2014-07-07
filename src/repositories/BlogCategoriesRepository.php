@@ -1,5 +1,4 @@
 <?php
-namespace Monal\Blog\Repositories;
 /**
  * Blog Categories Repository.
  *
@@ -8,6 +7,8 @@ namespace Monal\Blog\Repositories;
  *
  * @author  Arran Jacques
  */
+
+namespace Monal\Blog\Repositories;
 
 use Monal\Blog\Models\BlogCategory;
 
@@ -21,14 +22,15 @@ interface BlogCategoriesRepository
     public function messages();
 
     /**
-     * Return a new Blog Category model.
+     * Return a new blog category model.
      *
      * @return  Monal\Blog\Models\BlogCategory
      */
     public function newModel();
 
     /**
-     * Check a Blog Category model validates for storage.
+     * Check blog post category model validates for storage in the
+     * repository.
      *
      * @param   Monal\Blog\Models\BlogCategory
      * @return  Boolean
@@ -44,7 +46,7 @@ interface BlogCategoriesRepository
     public function retrieve($key = null);
 
     /**
-     * Write a Blog Category model to the repository.
+     * Write a blog category model to the repository.
      *
      * @param   Monal\Blog\Models\BlogCategory
      * @return  Boolean
