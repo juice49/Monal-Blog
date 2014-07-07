@@ -1,11 +1,14 @@
 <?php
-namespace Monal\Blog\Libraries;
 /**
- * API for retrieving blog posts and categories, specifically for use
- * on the front end.
+ * Blog 
  *
- * @author	Arran Jacque
+ * Library of methods to make retrieving blog posts and other
+ * information about the blog easy from within front-end pages.
+ *
+ * @author	Arran Jacques
  */
+
+namespace Monal\Blog\Libraries;
 
 class Blog
 {
