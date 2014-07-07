@@ -30,10 +30,10 @@ class MonalFrontendBlogPost implements FrontendBlogPost
     public function __construct(BlogPost $post)
     {
         // Set the post's fixed properties.
-        $this->properties['id'] = $post->ID();
-        $this->properties['slug'] = $post->slug();
-        $this->properties['uri'] = $post->URI();
-        $this->properties['title'] = $post->title();
+        $this->properties['id'] = (string) $post->ID();
+        $this->properties['slug'] = (string) $post->slug();
+        $this->properties['uri'] = (string) $post->URI();
+        $this->properties['title'] = (string) $post->title();
         $this->properties['created_at'] = $post->createdAt();
         $this->properties['data_sets'] = new \stdClass;
 
