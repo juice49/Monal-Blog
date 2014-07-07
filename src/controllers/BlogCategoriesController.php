@@ -2,8 +2,7 @@
 /**
  * Blog Categories Controller.
  *
- * This is the controller for requests to the Blog package’s
- * categories dashboards.
+ * Controller for the Blog Categories admin dashboards.
  *
  * @author  Arran Jacques
  */
@@ -13,8 +12,7 @@ use Monal\Monal;
 class BlogCategoriesController extends AdminController
 {
     /**
-     * Process requests to the categories admin dashboard and output a
-     * response.
+     * Blog categroies dashboard.
      *
      * @return  Illuminate\View\View / Illuminate\Http\RedirectResponse
      */
@@ -29,8 +27,7 @@ class BlogCategoriesController extends AdminController
     }
 
     /**
-     * Process requests to the create blog category admin dashboard and
-     * output a response.
+     * Create blog category dashboard.
      *
      * @return  Illuminate\View\View / Illuminate\Http\RedirectResponse
      */
@@ -53,8 +50,7 @@ class BlogCategoriesController extends AdminController
     }
 
     /**
-     * Process requests to the edit blog category admin dashboard and
-     * output a response.
+     * Edit blog category dashboard.
      *
      * @param   Integer
      * @return  Illuminate\View\View / Illuminate\Http\RedirectResponse
