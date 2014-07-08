@@ -269,6 +269,25 @@ class MonalBlogPostsRepository extends Repository implements BlogPostsRepository
     }
 
     /**
+     * Retrieve a given number of entries from the repo.
+     *
+     * @return  Illuminate\Database\Eloquent\Collection
+     */
+    public function retreiveAmount($limit)
+    {
+        // Get the enteries from the repo.
+        $results = $this->retrieveQuery()->take($limit)->orderBy('created_at', 'desc')->get();
+
+        // Loop through the returned entries and encode each one into a
+        // BlogPost model.
+        $blog_posts = \App::make('Illuminate\Database\Eloquent\Collection');
+        foreach ($this->collapseResults($results) as $result) {
+            $blog_posts->add($this->decodeFromStorage($result));
+        }
+        return $blog_posts;
+    }
+
+    /**
      * Retrieve a single blog post from the repository by its slug.
      *
      * @param   String
