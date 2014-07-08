@@ -43,27 +43,54 @@ Monal\API\Routes::addAdminRoute(
 	'BlogCategoriesController@edit'
 );
 
-// Frontend routes.
+/*
+|--------------------------------------------------------------------------
+| Frontend Routes
+|--------------------------------------------------------------------------
+|
+*/
+
+$blog_accessor_slug = Config::get('blog::config.slug');
+
+// Main blog page.
 Route::any(
-	Config::get('blog::config.slug'),
+	$blog_accessor_slug,
 	array(
 		'as' => 'blog',
 		'uses' => 'FrontendBlogController@blog',
 	)
 );
 
+// Blog post page.
 Route::any(
-	Config::get('blog::config.slug') . '/{slug}',
+	$blog_accessor_slug . '/{slug}',
 	array(
-		'as' => 'blog',
+		'as' => 'blog.post',
 		'uses' => 'FrontendBlogController@post',
 	)
 );
 
+// Blog archive and rss pages.
 Route::any(
-	Config::get('blog::config.slug') . '/{year}/{month}',
-	array(
-		'as' => 'blog',
-		'uses' => 'FrontendBlogController@postsByMonth',
-	)
+	$blog_accessor_slug . '/{slug_1}/{slug_2}',
+	function($slug_1, $slug_2) {
+		// Since several blog pages have the same url structure we need to
+		// check each part of the url to work out the correct controller to
+		// route to.
+		switch ($slug_1) {
+			case 'rss':
+				$controller = \App::make('BlogRSSController');
+				return $controller->feed();
+				break;
+			default:
+				if (
+					ctype_digit((string) $slug_1) AND
+					strlen($slug_1) == 4
+				) {
+					$controller = \App::make('FrontendBlogController');
+					return $controller->postsByMonth($slug_1, $slug_2);
+				}
+				break;
+		}
+	}
 );
