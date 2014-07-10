@@ -61,8 +61,8 @@ class BlogServiceProvider extends ServiceProvider implements MonalPackageService
 		include __DIR__ . '/../../routes.php';
 
 		// Add menu options to the dashboard.
-		\Monal\API\Dashboard::addMenuOption('Blog', 'Blog Posts', 'blog/posts');
-		\Monal\API\Dashboard::addMenuOption('Blog', 'Blog Categories', 'blog/categories');
+		\Monal\API\Dashboard::addMenuOption('Blog', 'Blog Posts', 'blog/posts', 'blog');
+		\Monal\API\Dashboard::addMenuOption('Blog', 'Blog Categories', 'blog/categories', 'blog');
 
 		// Load facade aliases.
 		$loader = \Illuminate\Foundation\AliasLoader::getInstance();
